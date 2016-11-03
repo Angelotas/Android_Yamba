@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">YambaGrupo6</string>
+    <string name="title_status">Actualización de Estado</string>
+    <string name="button_tweet">Tweet</string>
+    <string name="hint_status">Por favor, introduce tu estado en 140 caracteres</string>
+    <string name="envio_correcto">Tweet enviado correctamente</string>
+    <string name="envio_incorrecto">Fallo en el envío del tweet</string>
+    <string name="title_progresDialog">Enviando</string>
+    <string name="content_progresDialog">Por favor espere...</string>
+</resources>

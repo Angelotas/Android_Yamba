@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">YambaGrupo6</string>
+    <string name="title_status">Status Update</string>
+    <string name="button_tweet">Tweet</string>
+    <string name="hint_status">Please, enter your 140 character status</string>
+    <string name="envio_correcto">Tweet sent successfully</string>
+    <string name="envio_incorrecto">Failure sending tweet</string>
+    <string name="title_progresDialog">Posting</string>
+    <string name="content_progresDialog">Please wait...</string>
+</resources>
