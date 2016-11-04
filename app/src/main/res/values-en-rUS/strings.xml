@@ -7,4 +7,8 @@
     <string name="envio_incorrecto">Failure sending tweet</string>
     <string name="title_progresDialog">Posting</string>
     <string name="content_progresDialog">Please wait...</string>
+    <string name="titleAccessToken">Access Token</string>
+    <string name="summaryAccessToken">Please, insert your Access Token</string>
+    <string name="titleAccessTokenSecret">Access Token Secret</string>
+    <string name="summaryAccessTokenSecret">Please, insert your Access Token Secret</string>
 </resources>
