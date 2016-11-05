@@ -2,9 +2,11 @@ package com.example.ngel.yambagrupo6;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +25,8 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class StatusFragment extends Fragment implements View.OnClickListener, TextWatcher{
 
+    SharedPreferences prefs; //para acceder al menú desde este fragment dentro del activity
+
     private static final String TAG = "StatusActivity"; //variable para los LOG
     EditText editStatus;
     Button buttonTweet;
@@ -33,8 +37,9 @@ public class StatusFragment extends Fragment implements View.OnClickListener, Te
     public View onCreateView(LayoutInflater inflater, ViewGroup
             container, Bundle savedInstanceStat) {
 
-        View view = inflater.inflate(R.layout.fragment_status,container, false);
+        View view = inflater.inflate(R.layout.fragment_status,container, false); //lo relaciona con su correspondiente XML
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());  //para acceder al menú de preferencias
 
         // Find views
         editStatus = (EditText) view.findViewById(R.id.editStatus);
