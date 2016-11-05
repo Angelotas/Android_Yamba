@@ -2,12 +2,14 @@ package com.example.ngel.yambagrupo6;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,14 +54,7 @@ public class StatusFragment extends Fragment implements View.OnClickListener, Te
         textCount.setTextColor(Color.GREEN);
         editStatus.addTextChangedListener(this);
 
-        //Aqui la configuración Twiter
-        ConfigurationBuilder builder = new ConfigurationBuilder();
-        builder.setOAuthConsumerKey("H8jPiRqgcIzUjyiLxLMeIpD9U")
-                .setOAuthConsumerSecret("wAMU8qfrRZDMmRztWpnLPIJNpSxkw8inTjHN49riohOoYK1EjA")
-                .setOAuthAccessToken("781219984072663041-BSJyn92gQ4IIW0w2xhzRsJ9zzVSWt4F")
-                .setOAuthAccessTokenSecret("cP56dBKhAYmLdcJ2RmWvf7yJFGhinCgTdilHMP9mhhQHL");
-        TwitterFactory factory =new TwitterFactory(builder.build());
-        twitter = factory.getInstance(); //conexión al servicio online que soporta la API de Twitter
+
 
         return view;
     }
@@ -105,6 +100,27 @@ public class StatusFragment extends Fragment implements View.OnClickListener, Te
 
         @Override
         protected String doInBackground(String... params) {
+            String accesstoken = prefs.getString("accesstoken", "");
+            String accesstokensecret = prefs.getString("accesstokensecret", "");
+
+
+            // Comprobar si el nombre de usuario o el password están vacíos.
+            // Si lo están, indicarlo mediante un Toast y redirigir al usuario a Settings
+            if (TextUtils.isEmpty(accesstoken) || TextUtils.isEmpty(accesstokensecret)) {
+                getActivity().startActivity(new Intent(getActivity(), SettingsActivity.class));  //te lleva al activity de preferencias
+                return getString(R.string.preferencias_vacias);
+            }
+
+            //Aqui la configuración Twiter
+            ConfigurationBuilder builder = new ConfigurationBuilder();
+            builder.setOAuthConsumerKey("H8jPiRqgcIzUjyiLxLMeIpD9U")
+                    .setOAuthConsumerSecret("wAMU8qfrRZDMmRztWpnLPIJNpSxkw8inTjHN49riohOoYK1EjA")
+                    .setOAuthAccessToken("781219984072663041-BSJyn92gQ4IIW0w2xhzRsJ9zzVSWt4F")
+                    .setOAuthAccessTokenSecret("cP56dBKhAYmLdcJ2RmWvf7yJFGhinCgTdilHMP9mhhQHL");
+            TwitterFactory factory =new TwitterFactory(builder.build());
+            twitter = factory.getInstance(); //conexión al servicio online que soporta la API de Twitter
+
+
             try {
                 twitter.updateStatus(params[0]);
                 return getString(R.string.envio_correcto);

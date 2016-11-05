@@ -14,4 +14,5 @@
     <string name="action_settings">Settings</string>
     <string name="purge">Clean</string>
     <string name="tweet">Tweet</string>
+    <string name="preferencias_vacias">Please, update your name and your pasword</string>
 </resources>

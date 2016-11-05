@@ -14,4 +14,5 @@
     <string name="purge">Limpiar</string>
     <string name="action_settings">Preferencias</string>
     <string name="tweet">Tweet</string>
+    <string name="preferencias_vacias">Por favor, actualiza tu nombre de usuario y tu contraseña</string>
 </resources>
