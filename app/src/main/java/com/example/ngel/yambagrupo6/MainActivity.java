@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class)); //relaciona con el activity de preferencias y su
-                return true;                                             //correspondiente fragment (
+                return true;                                             //correspondiente fragment
             case R.id.action_tweet:
                 startActivity(new Intent(this, StatusActivity.class));   //relacinoa con el activity de Status (tweet) y su
                 return true;                                             //correspondiente fragment
