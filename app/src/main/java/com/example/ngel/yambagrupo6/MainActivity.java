@@ -33,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_tweet:
                 startActivity(new Intent(this, StatusActivity.class));   //relacinoa con el activity de Status (tweet) y su
                 return true;                                             //correspondiente fragment
+            case R.id.itemServiceStart:
+                startService(new Intent(this, RefreshService.class));
+                return true;
+            case R.id.itemServiceStop:
+                stopService(new Intent(this, RefreshService.class));
+                return true;
             default:
                 return false;
         }

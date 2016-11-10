@@ -15,4 +15,6 @@
     <string name="purge">Clean</string>
     <string name="tweet">Tweet</string>
     <string name="preferencias_vacias">Please, update your name and your pasword</string>
+    <string name="titleServiceStart">Start service</string>
+    <string name="titleServiceStop">Stop service</string>
 </resources>

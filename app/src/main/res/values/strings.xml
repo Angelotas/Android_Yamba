@@ -15,4 +15,6 @@
     <string name="action_settings">Preferencias</string>
     <string name="tweet">Tweet</string>
     <string name="preferencias_vacias">Por favor, actualiza tu nombre de usuario y tu contraseña</string>
+    <string name="titleServiceStart">Arrancar servicio</string>
+    <string name="titleServiceStop">Parar servicio</string>
 </resources>

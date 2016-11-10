@@ -14,9 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".StatusActivity"></activity>
+        <activity android:name=".StatusActivity" />
 
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -26,6 +26,9 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".RefreshService">
+        </service>
     </application>
 
 </manifest>
