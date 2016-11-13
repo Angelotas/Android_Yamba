@@ -39,7 +39,7 @@ public class RefreshService extends IntentService {
         this.runFlag= true;
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
+        //El valor de ambos se dejará por defecto en ConfigurationBuilder para no tener que introducirlo ahí manualmente
         String accesstoken = prefs.getString("accesstoken", "");
         String accesstokensecret = prefs.getString("accesstokensecret", "");
 
