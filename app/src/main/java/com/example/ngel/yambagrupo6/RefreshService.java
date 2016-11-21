@@ -2,8 +2,10 @@ package com.example.ngel.yambagrupo6;
 
 import android.app.IntentService;
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -23,6 +25,8 @@ public class RefreshService extends IntentService {
     private boolean runFlag = false; //para saber si el servicio es
     SharedPreferences prefs;
     Twitter twitter;
+    DbHelper dbHelper; //clase para conectar la BBDD
+    SQLiteDatabase db;
 
     public RefreshService() {
         super(TAG);
@@ -32,6 +36,8 @@ public class RefreshService extends IntentService {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreated");
+
+        dbHelper = new DbHelper(this);
     }
 
     @Override
@@ -59,11 +65,25 @@ public class RefreshService extends IntentService {
 
                 try {
                     List<Status> timeline = twitter.getHomeTimeline();
-                    // Imprimimos las actualizaciones en el log
+
+                    db = dbHelper.getWritableDatabase(); //abre la bbdd como escritura
+                    ContentValues values = new ContentValues(); //estructura de datos nombre-valor que mapea los nombres de la BBDD con sus valores
+
                     for (Status status : timeline) {
-                        Log.d(TAG, String.format("%s: %s", status.getUser().getName(),
-                                status.getText()));
+                        //Insertar en la BBDD
+                        values.clear(); //en cada iteración se limpia la estructura de nombres-valor
+                        //MAPEO DE CADA ELEMENTO DE LA TABLA
+                        values.put(StatusContract.Column.ID, status.getId());
+                        values.put(StatusContract.Column.USER, status.getUser().getName());
+                        values.put(StatusContract.Column.MESSAGE, status.getText());
+                        values.put(StatusContract.Column.CREATED_AT, status.getCreatedAt().getTime());
+                        //INSERCCIÓN DEL CONTENTVALUES EN LA BBDD
+                        //-WithOnConflict =>solo actualizaciones de estado nuevas
+                        db.insertWithOnConflict (StatusContract.TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);
                     }
+                    //CERRAR BBDD
+                    //-Importante por si otro activity quiere hacer uso de la BBDD
+                    db.close();
                 } catch (TwitterException e) {
                     Log.e(TAG, "Failed to fetch the timeline", e);
                 }
@@ -83,7 +103,4 @@ public class RefreshService extends IntentService {
         this.runFlag = false;
         Log.d(TAG, "onDestroyed");
     }
-
-
-
 }
