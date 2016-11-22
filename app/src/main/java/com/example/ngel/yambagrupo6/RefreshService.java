@@ -22,9 +22,8 @@ import twitter4j.conf.ConfigurationBuilder;
 public class RefreshService extends IntentService {
 
     static final String TAG = "RefreshService";
-    static final int DELAY =40000; //el tiempo de espera para volver a recopilar datos de twitter
-    private boolean runFlag = false; //para saber si el servicio es
     SharedPreferences prefs;
+    private boolean runFlag = false; //para saber si el servicio es
     Twitter twitter;
     DbHelper dbHelper; //clase para conectar la BBDD
     SQLiteDatabase db;
@@ -37,7 +36,6 @@ public class RefreshService extends IntentService {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreated");
-
         dbHelper = new DbHelper(this);
     }
 
@@ -49,6 +47,7 @@ public class RefreshService extends IntentService {
         //El valor de ambos se dejará por defecto en ConfigurationBuilder para no tener que introducirlo ahí manualmente
         String accesstoken = prefs.getString("accesstoken", "");
         String accesstokensecret = prefs.getString("accesstokensecret", "");
+        int delay=Integer.parseInt(prefs.getString("delay","30000")); //por defecto 30sec
 
         Log.d(TAG, "onStarted");
 
@@ -90,7 +89,7 @@ public class RefreshService extends IntentService {
                 }
 
                 Log.d(TAG, "Updater ran");
-                Thread.sleep(DELAY);
+                Thread.sleep(delay); //el nº de milisegundos que haa en las preferencias compartidas
 
             } catch (InterruptedException e) {
                 runFlag = false;

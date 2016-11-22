@@ -10,4 +10,10 @@
         android:title="@string/titleAccessTokenSecret"
         android:key="accesstokensecret"
         android:inputType="textPassword"/>
+
+    <EditTextPreference
+        android:summary="Por favor, introduce el intervalo de milisegundos para el refrescado de tweets (por defecto 30000 milisegundos)"
+        android:title="Refrescado(ms)"
+        android:key="delay"
+        android:inputType="number"/>
 </PreferenceScreen>
