@@ -38,19 +38,64 @@ public class StatusProvider extends ContentProvider{
         return true;
     }
 
-    @Nullable
+
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;
+
+        String where;
+
+        switch (sURIMatcher.match(uri)) {
+            case StatusContract.STATUS_DIR:
+                where = selection;
+                break;
+            case StatusContract.STATUS_ITEM:
+                long id = ContentUris.parseId(uri);
+                where = StatusContract.Column.ID
+                        + "="
+                        + id
+                        + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
+                break;
+            default:
+                throw new IllegalArgumentException("uri incorrecta: " + uri);
+        }
+
+        String orderBy= (TextUtils.isEmpty(sortOrder))
+                ? StatusContract.DEFAULT_SORT
+                : sortOrder;
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase(); //abrimos la bbdd en modo lectura
+        Cursor cursor = db.query(StatusContract.TABLE, projection, where, selectionArgs, null, null, orderBy);
+
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
+        Log.d(TAG, "registros recuperados: " + cursor.getCount());
+        return cursor;
     }
 
     @Nullable
     @Override
     public String getType(Uri uri) {
-        return null;
+        //Con este método se identifica el tipo de dato que devuelve el Content Provider
+        //La respuesta será de tipo MIME Type
+        //Para saber si una determinada app puede procesar dichos datos
+        //Se puede devolver un MIME de registro único o como lista de registros
+
+        switch (sURIMatcher.match(uri)) {
+            case StatusContract.STATUS_DIR:
+                Log.d(TAG, "gotType: vnd.android.cursor.dir/" +
+                        "vnd.com.example.anibal.yamba.provider.status");
+                return "vnd.android.cursor.dir/vnd.com.example.ngel.yambagrupo6.provider.status";
+
+            case StatusContract.STATUS_ITEM:
+                Log.d(TAG, "gotType: vnd.android.cursor.item/" +
+                        "vnd.com.example.ngel.yambagrupo6.provider.status");
+                return "vnd.android.cursor.item/vnd.com.example.anibal.yamba.provider.status";
+            default:
+                throw new IllegalArgumentException("uri incorrecta: " + uri);
+        }
+
     }
 
-    @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         Uri ret = null; //uri que se devuelve si se inserta correctamente
@@ -73,12 +118,40 @@ public class StatusProvider extends ContentProvider{
             // Notificar que los datos para la URI han cambiado
             getContext().getContentResolver().notifyChange(uri, null);
         }
+        else
+            Log.d(TAG,"uri ya insertada");
+
         return ret;
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+
+        String where;
+
+        switch (sURIMatcher.match(uri)) {
+            case StatusContract.STATUS_DIR:
+                where = selection;
+                break;
+            case StatusContract.STATUS_ITEM:
+                long id = ContentUris.parseId(uri);
+                where = StatusContract.Column.ID
+                        + "="
+                        + id
+                        + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
+                break;
+            default:
+                throw new IllegalArgumentException("uri incorrecta: " + uri);
+        }
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int ret = db.delete(StatusContract.TABLE, where, selectionArgs); //aquí está la diferencia con el modificado (sin necesidad de content values)
+
+        if (ret > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        Log.d(TAG, "registros borrados: " + ret);
+        return ret;
     }
 
     @Override
@@ -109,7 +182,5 @@ public class StatusProvider extends ContentProvider{
         }
         Log.d(TAG, "registros actualizados: " + ret);
         return ret;
-
-
     }
 }

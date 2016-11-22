@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -21,7 +22,7 @@ import twitter4j.conf.ConfigurationBuilder;
 public class RefreshService extends IntentService {
 
     static final String TAG = "RefreshService";
-    static final int DELAY = 5000; //el tiempo de espera para volver a recopilar datos de twitter
+    static final int DELAY =40000; //el tiempo de espera para volver a recopilar datos de twitter
     private boolean runFlag = false; //para saber si el servicio es
     SharedPreferences prefs;
     Twitter twitter;
@@ -65,8 +66,7 @@ public class RefreshService extends IntentService {
 
                 try {
                     List<Status> timeline = twitter.getHomeTimeline();
-
-                    db = dbHelper.getWritableDatabase(); //abre la bbdd como escritura
+                    //ahora no es necesario abrir la bbdd ya que se abre en cada método de la clase StatusProvider
                     ContentValues values = new ContentValues(); //estructura de datos nombre-valor que mapea los nombres de la BBDD con sus valores
 
                     for (Status status : timeline) {
@@ -77,13 +77,14 @@ public class RefreshService extends IntentService {
                         values.put(StatusContract.Column.USER, status.getUser().getName());
                         values.put(StatusContract.Column.MESSAGE, status.getText());
                         values.put(StatusContract.Column.CREATED_AT, status.getCreatedAt().getTime());
-                        //INSERCCIÓN DEL CONTENTVALUES EN LA BBDD
-                        //-WithOnConflict =>solo actualizaciones de estado nuevas
-                        db.insertWithOnConflict (StatusContract.TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+                        /*INSERCCIÓN DEL CONTENTVALUES EN LA BBDD SIN USAR CONTENT PROVIDER
+                            -WithOnConflict =>solo actualizaciones de estado nuevas
+                            db.insertWithOnConflict (StatusContract.TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);*/
+
+                        //INSERCCIÓN DEL CONTENTVALUES EN LA BBDD CON CONTENT PROVIDER
+                        Uri uri = getContentResolver().insert(StatusContract.CONTENT_URI, values); //Método insert del StatusProvider
+
                     }
-                    //CERRAR BBDD
-                    //-Importante por si otro activity quiere hacer uso de la BBDD
-                    db.close();
                 } catch (TwitterException e) {
                     Log.e(TAG, "Failed to fetch the timeline", e);
                 }

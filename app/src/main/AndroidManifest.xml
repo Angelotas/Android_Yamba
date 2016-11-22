@@ -29,6 +29,13 @@
         <service
             android:name=".RefreshService">
         </service>
+
+        <provider
+            android:name="com.example.ngel.yambagrupo6.StatusProvider"
+            android:authorities="com.example.ngel.yambagrupo6.StatusProvider"
+            android:exported="false"
+        />
+
     </application>
 
 </manifest>
