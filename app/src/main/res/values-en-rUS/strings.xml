@@ -17,4 +17,6 @@
     <string name="preferencias_vacias">Please, update your name and your pasword</string>
     <string name="titleServiceStart">Start service</string>
     <string name="titleServiceStop">Stop service</string>
+    <string name="sumary_delay">Please, insert time interval for refreshing tweets (default 30000 miliseconds)</string>
+    <string name="key_delay">Refresh(ms)</string>
 </resources>
