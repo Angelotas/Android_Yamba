@@ -19,4 +19,5 @@
     <string name="titleServiceStop">Stop service</string>
     <string name="sumary_delay">Please, insert time interval for refreshing tweets (default 30000 miliseconds)</string>
     <string name="key_delay">Refresh(ms)</string>
+    <string name="filas_borradas">filas de la base de datos borradas</string>
 </resources>
